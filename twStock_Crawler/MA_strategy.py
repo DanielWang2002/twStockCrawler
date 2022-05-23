@@ -128,20 +128,20 @@ def get_KPI(df):
             MDD = diff
 
     KPI_df = pd.DataFrame()
-    KPI_df.at['交易次數', '數值'] = trade_time
-    KPI_df.at['總報酬', '數值'] = total_profit
-    KPI_df.at['成功次數', '數值'] = win_times
-    KPI_df.at['虧損次數', '數值'] = loss_times
-    KPI_df.at['勝率', '數值'] = win_rate
-    KPI_df.at['獲利總金額', '數值'] = win_profit
-    KPI_df.at['虧損總金額', '數值'] = loss_profit
-    KPI_df.at['獲利因子', '數值'] = profit_factor
-    KPI_df.at['平均獲利金額', '數值'] = avg_win_profit
-    KPI_df.at['平均虧損金額', '數值'] = avg_loss_profit
-    KPI_df.at['賺賠比', '數值'] = profit_rate
-    KPI_df.at['最大單筆獲利', '數值'] = max_profit
-    KPI_df.at['最大單筆虧損', '數值'] = max_loss
-    KPI_df.at['MDD', '數值'] = MDD
+    KPI_df.at['交易次數', '數值'] = round(trade_time, 2)
+    KPI_df.at['總報酬', '數值'] = round(total_profit, 2)
+    KPI_df.at['成功次數', '數值'] = round(win_times, 2)
+    KPI_df.at['虧損次數', '數值'] = round(loss_times, 2)
+    KPI_df.at['勝率', '數值'] = round(win_rate, 2)
+    KPI_df.at['獲利總金額', '數值'] = round(win_profit, 2)
+    KPI_df.at['虧損總金額', '數值'] = round(loss_profit, 2)
+    KPI_df.at['獲利因子', '數值'] = round(profit_factor, 2)
+    KPI_df.at['平均獲利金額', '數值'] = round(avg_win_profit, 2)
+    KPI_df.at['平均虧損金額', '數值'] = round(avg_loss_profit, 2)
+    KPI_df.at['賺賠比', '數值'] = round(profit_rate, 2)
+    KPI_df.at['最大單筆獲利', '數值'] = round(max_profit, 2)
+    KPI_df.at['最大單筆虧損', '數值'] = round(max_loss, 2)
+    KPI_df.at['MDD', '數值'] = round(MDD, 2)
 
     return KPI_df
 
