@@ -140,24 +140,24 @@ def get_KPI(df):
         if diff > MDD:
             MDD = diff
 
-    # KPI文字
-    result_txt = f"\
-     交易次數：{trade_time} \n \
-    總報酬：{total_profit} \n \
-    成功次數：{win_times} \n \
-    虧損次數：{loss_times} \n \
-    勝率：{win_rate} \n \
-    獲利總金額：{win_profit}  \n \
-    虧損總金額：{loss_profit} \n \
-    獲利因子：{profit_factor} \n \
-    平均獲利金額：{avg_win_profit} \n \
-    平均虧損金額：{avg_loss_profit} \n \
-    賺賠比：{profit_rate} \n \
-    最大單筆獲利：{max_profit} \n \
-    最大單筆虧損：{max_loss} \n \
-    MDD：{MDD}"
 
-    return result_txt
+    KPI_df = pd.DataFrame()
+    KPI_df.at['交易次數', '數值'] = trade_time
+    KPI_df.at['總報酬', '數值'] = total_profit
+    KPI_df.at['成功次數', '數值'] = win_times
+    KPI_df.at['虧損次數', '數值'] = loss_times
+    KPI_df.at['勝率', '數值'] = win_rate
+    KPI_df.at['獲利總金額', '數值'] = win_profit
+    KPI_df.at['虧損總金額', '數值'] = loss_profit
+    KPI_df.at['獲利因子', '數值'] = profit_factor
+    KPI_df.at['平均獲利金額', '數值'] = avg_win_profit
+    KPI_df.at['平均虧損金額', '數值'] = avg_loss_profit
+    KPI_df.at['賺賠比', '數值'] = profit_rate
+    KPI_df.at['最大單筆獲利', '數值'] = max_profit
+    KPI_df.at['最大單筆虧損', '數值'] = max_loss
+    KPI_df.at['MDD', '數值'] = MDD
+
+    return KPI_df
 
 
 def main(stock_id, period="12mo"):
@@ -165,9 +165,9 @@ def main(stock_id, period="12mo"):
     df = trade(df)
 
     # 取得KPI文字
-    result_text = get_KPI(df)
+    KPI_df = get_KPI(df)
 
-    return df, result_text
+    return df, KPI_df
 
 
 if __name__ == "__main__":

@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import MA_strategy
 import yF_Kbar
 import RSI_MACD_Strategy
-
+import RSI_MACD_OSC_Strategy
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -42,13 +42,6 @@ class Ui_MainWindow(object):
         font.setPointSize(12)
         self.pushButton.setFont(font)
         self.pushButton.setObjectName("pushButton")
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(340, 550, 381, 281))
-        font = QtGui.QFont()
-        font.setFamily("微軟正黑體")
-        font.setPointSize(12)
-        self.label_3.setFont(font)
-        self.label_3.setObjectName("label_3")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(50, 30, 621, 381))
         self.label.setText("")
@@ -70,7 +63,7 @@ class Ui_MainWindow(object):
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox.setGeometry(QtCore.QRect(40, 580, 211, 111))
+        self.groupBox.setGeometry(QtCore.QRect(40, 580, 211, 131))
         self.groupBox.setObjectName("groupBox")
         self.radioButton = QtWidgets.QRadioButton(self.groupBox)
         self.radioButton.setEnabled(True)
@@ -91,6 +84,20 @@ class Ui_MainWindow(object):
         self.radioButton_2.setFont(font)
         self.radioButton_2.setCheckable(True)
         self.radioButton_2.setObjectName("radioButton_2")
+        self.radioButton_3 = QtWidgets.QRadioButton(self.groupBox)
+        self.radioButton_3.setEnabled(True)
+        self.radioButton_3.setGeometry(QtCore.QRect(30, 90, 171, 21))
+        font = QtGui.QFont()
+        font.setFamily("微軟正黑體")
+        font.setPointSize(12)
+        self.radioButton_3.setFont(font)
+        self.radioButton_3.setCheckable(True)
+        self.radioButton_3.setObjectName("radioButton_3")
+        self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.tableWidget.setGeometry(QtCore.QRect(270, 550, 471, 321))
+        self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setColumnCount(0)
+        self.tableWidget.setRowCount(0)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -101,14 +108,14 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "C109156107王昱翔"))
         self.label_2.setText(_translate("MainWindow", "請輸入股票代號"))
         self.pushButton.setText(_translate("MainWindow", "顯示K線圖"))
-        self.label_3.setText(_translate("MainWindow", "顯示結果文字"))
         self.label_4.setText(_translate("MainWindow", "回測月數"))
         self.groupBox.setTitle(_translate("MainWindow", "策略選擇"))
         self.radioButton.setText(_translate("MainWindow", "MA交叉"))
         self.radioButton_2.setText(_translate("MainWindow", "RSI + MACD"))
+        self.radioButton_3.setText(_translate("MainWindow", "RSI + MACD + OSC"))
 
         ## 按下button後觸發onClick
         self.pushButton.clicked.connect(self.onClick)
@@ -118,16 +125,35 @@ class Ui_MainWindow(object):
         period = self.lineEdit_2.text() + "mo"
 
         if self.radioButton.isChecked():
-            df, result_txt = MA_strategy.main(stock_id, period)
+            df, KPI_df = MA_strategy.main(stock_id, period)
         elif self.radioButton_2.isChecked():
-            df, result_txt = RSI_MACD_Strategy.main(stock_id, period)
+            df, KPI_df = RSI_MACD_Strategy.main(stock_id, period)
+        elif self.radioButton_3.isChecked():
+            df, KPI_df = RSI_MACD_OSC_Strategy.main(stock_id, period)
 
         yF_Kbar.draw_candle_chart(stock_id, df)
-
         _translate = QtCore.QCoreApplication.translate
-        self.label_3.setText(_translate("MainWindow", result_txt))
-        self.label.setPixmap(QtGui.QPixmap("stock_Kbar.png"))
 
+        self.tableWidget.setRowCount(KPI_df.shape[0])
+        self.tableWidget.setColumnCount(KPI_df.shape[1])
+
+        self.tableWidget.setVerticalHeaderLabels(KPI_df.index)
+        self.tableWidget.setHorizontalHeaderLabels(KPI_df.columns)
+
+        count = 0
+        for i in KPI_df['數值']:
+
+            # create table
+            item = QtWidgets.QTableWidgetItem()
+            self.tableWidget.setItem(count , 0, item)
+
+            # 填入資料
+            item = self.tableWidget.item(count, 0)
+            item.setText(_translate("MainWindow", str(i)))
+
+            count += 1
+
+        self.label.setPixmap(QtGui.QPixmap("stock_Kbar.png"))
 
 if __name__ == "__main__":
     import sys
