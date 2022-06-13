@@ -45,7 +45,7 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(50, 30, 621, 381))
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap(".\\meme.jpg"))
+        self.label.setPixmap(QtGui.QPixmap(".\\k-line.png"))
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
         self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)

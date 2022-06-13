@@ -125,10 +125,10 @@
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>20</x>
       <y>580</y>
       <width>211</width>
-      <height>131</height>
+      <height>171</height>
      </rect>
     </property>
     <property name="title">
@@ -207,6 +207,31 @@
      </property>
      <property name="text">
       <string>RSI + MACD + OSC</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="radioButton_4">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>120</y>
+       <width>171</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>微軟正黑體</family>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>DI + OSC + SMA</string>
      </property>
      <property name="checkable">
       <bool>true</bool>

@@ -13,6 +13,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import MA_strategy
 import yF_Kbar
 import RSI_MACD_Strategy
+import RSI_MACD_OSC_Strategy
+import DI_OSC_SMA
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -62,7 +64,7 @@ class Ui_MainWindow(object):
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox.setGeometry(QtCore.QRect(40, 580, 211, 131))
+        self.groupBox.setGeometry(QtCore.QRect(20, 580, 211, 171))
         self.groupBox.setObjectName("groupBox")
         self.radioButton = QtWidgets.QRadioButton(self.groupBox)
         self.radioButton.setEnabled(True)
@@ -92,6 +94,15 @@ class Ui_MainWindow(object):
         self.radioButton_3.setFont(font)
         self.radioButton_3.setCheckable(True)
         self.radioButton_3.setObjectName("radioButton_3")
+        self.radioButton_4 = QtWidgets.QRadioButton(self.groupBox)
+        self.radioButton_4.setEnabled(True)
+        self.radioButton_4.setGeometry(QtCore.QRect(30, 120, 171, 21))
+        font = QtGui.QFont()
+        font.setFamily("微軟正黑體")
+        font.setPointSize(12)
+        self.radioButton_4.setFont(font)
+        self.radioButton_4.setCheckable(True)
+        self.radioButton_4.setObjectName("radioButton_4")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
         self.tableWidget.setGeometry(QtCore.QRect(270, 550, 471, 321))
         self.tableWidget.setObjectName("tableWidget")
@@ -115,6 +126,7 @@ class Ui_MainWindow(object):
         self.radioButton.setText(_translate("MainWindow", "MA交叉"))
         self.radioButton_2.setText(_translate("MainWindow", "RSI + MACD"))
         self.radioButton_3.setText(_translate("MainWindow", "RSI + MACD + OSC"))
+        self.radioButton_4.setText(_translate("MainWindow", "DI + OSC + SMA"))
 
         ## 按下button後觸發onClick
         self.pushButton.clicked.connect(self.onClick)
@@ -127,6 +139,10 @@ class Ui_MainWindow(object):
             df, KPI_df = MA_strategy.main(stock_id, period)
         elif self.radioButton_2.isChecked():
             df, KPI_df = RSI_MACD_Strategy.main(stock_id, period)
+        elif self.radioButton_3.isChecked():
+            df, KPI_df = RSI_MACD_OSC_Strategy.main(stock_id, period)
+        elif self.radioButton_4.isChecked():
+            df, KPI_df = DI_OSC_SMA.main(stock_id, period)
 
         yF_Kbar.draw_candle_chart(stock_id, df)
         _translate = QtCore.QCoreApplication.translate
@@ -139,10 +155,9 @@ class Ui_MainWindow(object):
 
         count = 0
         for i in KPI_df['數值']:
-
             # create table
             item = QtWidgets.QTableWidgetItem()
-            self.tableWidget.setItem(count , 0, item)
+            self.tableWidget.setItem(count, 0, item)
 
             # 填入資料
             item = self.tableWidget.item(count, 0)

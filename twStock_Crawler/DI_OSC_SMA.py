@@ -23,10 +23,10 @@ def get_TA(stock_id, period="12mo"):
     df["OSC_5_T1"] = df["OSC_5"].shift(1)
     df["OSC_5_T2"] = df["OSC_5"].shift(2)
 
-    # RSI
-    df["RSI_5"] = talib.RSI(df["收盤價"], 5)
-    df["RSI_5_T1"] = df["RSI_5"].shift(1)
-    df["RSI_5_T2"] = df["RSI_5"].shift(2)
+    # DI
+    df["DI_5"] = talib.PLUS_DI(df["最高價"], df["最低價"], df["收盤價"])
+    df["DI_5_T1"] = df["DI_5"].shift(1)
+    df["DI_5_T2"] = df["DI_5"].shift(2)
 
     df["SMA_20"] = talib.SMA(df["收盤價"], 20)
     df["SMA_20_T1"] = df["SMA_20"].shift(1)
@@ -58,11 +58,11 @@ def trade(df):
                 hold = 0
             break
 
-        buy_condition_1 = (row["RSI_5_T1"] <= row["RSI_5_T2"]) and (row["RSI_5_T1"] < row["RSI_5"])
+        buy_condition_1 = (row["DI_5_T1"] < row["DI_5_T2"]) and (row["DI_5_T1"] < row["DI_5"])
         buy_condition_2 = row["SMA_20"] > row["SMA_20_T1"]
 
         sell_condition_1 = (row["OSC_5_T1"] >= row["OSC_5_T2"]) and (row["OSC_5_T1"] > row["OSC_5"])
-        sell_condition_2 = row["macd"] < 0 and row["signal"] < 0
+        sell_condition_2 = row["SMA_20"] < row["SMA_20_T1"]
 
         if (buy_condition_1 and buy_condition_2) and hold == 0:
             df.at[index, "Buy"] = row["收盤價"]

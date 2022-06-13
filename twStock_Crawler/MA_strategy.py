@@ -105,7 +105,7 @@ def get_KPI(df):
         avg_loss_profit = 0
 
     # 賺賠比
-    if avg_loss_profit > 0:
+    if avg_loss_profit != 0:
         profit_rate = abs(avg_win_profit / avg_loss_profit)
     else:
         profit_rate = 0
