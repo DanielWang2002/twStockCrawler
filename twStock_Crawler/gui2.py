@@ -46,7 +46,7 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(50, 30, 621, 381))
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap(".\\meme.jpg"))
+        self.label.setPixmap(QtGui.QPixmap(".\\k-line.png"))
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
         self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
@@ -118,7 +118,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "C109156107 王昱翔"))
         self.label_2.setText(_translate("MainWindow", "請輸入股票代號"))
         self.pushButton.setText(_translate("MainWindow", "顯示K線圖"))
         self.label_4.setText(_translate("MainWindow", "回測月數"))
