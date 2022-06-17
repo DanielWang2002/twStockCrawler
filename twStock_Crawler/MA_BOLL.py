@@ -20,6 +20,9 @@ def get_TA(stock_id, period="12mo", interval='1d'):
     df["Buy"] = None
     df["Sell"] = None
 
+    # 前一日收盤
+    df['收盤價_T1'] = df['收盤價'].shift(1)
+
     # 今日、前一日、前二日 MA5
     df['MA5'] = talib.MA(df['收盤價'], 5)
     df['MA5_T1'] = df['MA5'].shift(1)
@@ -34,11 +37,6 @@ def get_TA(stock_id, period="12mo", interval='1d'):
     df['MA20'] = talib.MA(df['收盤價'], 20)
     df['MA20_T1'] = df['MA20'].shift(1)
     df['MA20_T2'] = df['MA20'].shift(2)
-
-    # 今日、前一日、前二日 MA60
-    df['MA60'] = talib.MA(df['收盤價'], 60)
-    df['MA60_T1'] = df['MA60'].shift(1)
-    df['MA60_T2'] = df['MA60'].shift(2)
 
     # 布林通道 args: close 20 0
     df['upper'], df['middle'], df['lower'] = talib.BBANDS(df['收盤價'], timeperiod=20, nbdevup=2, nbdevdn=2, matype=0)
@@ -77,6 +75,7 @@ def trade(df):
 
     last_index = df.index[-1]
     hold = 0
+    buyPrice = 0
 
     for index, row in df.copy().iterrows():
 
@@ -93,30 +92,38 @@ def trade(df):
         # 今日MA10 > 昨日MA10 > 前日MA10
         buy_condition_2 = row['MA10'] > row['MA10_T1'] > row['MA10_T2']
 
-        # 今日MA20 > 昨日MA20 > 前日MA20
-        buy_condition_3 = row['MA20'] > row['MA20_T1'] > row['MA20_T2']
+        # 在中軌的上方2%內
+        buy_condition_3 = (row['middle'] * 1.02) > row['收盤價'] > row['middle']
+
+        # 今日開盤 > 昨日收盤 (紅K)
+        buy_condition_4 = row['開盤價'] > row['收盤價_T1']
 
         # 突破布林上軌
-        buy_condition_5 = row['收盤價'] >= row['upper']
+        buy_condition_5 = row['收盤價'] >= row['middle']
         ##########----------買進條件----------##########
 
         ##########----------賣出條件----------##########
         # 收盤價 <= 布林中軌
-        sell_condition_1 = row['收盤價'] <= row['middle']
+        sell_condition_1 = row['最高價'] >= row['upper']
 
-        # 今日MA5 <= 昨日MA5 <= 前日MA5
-        sell_condition_2 = row['MA5'] <= row['MA5_T1']
+        # # 今日MA5 <= 昨日MA5 <= 前日MA5
+        # sell_condition_2 = row['MA5'] <= row['MA5_T1']
         ##########----------賣出條件----------##########
 
         # (buy_condition_1 and buy_condition_2 and buy_condition_3 and buy_condition_4 and buy_condition_5)
-        if (buy_condition_1 and buy_condition_2 and buy_condition_3 and buy_condition_5) and hold == 0:
+        if (buy_condition_1 and buy_condition_2 and buy_condition_3 and buy_condition_4 and buy_condition_5) and hold == 0:
+            # buyPrice = row['收盤價']
             df.at[index, "Buy"] = row["收盤價"]
             print(f'Buy {index}')
             hold = 1
-        elif (sell_condition_1 and sell_condition_2) and hold == 1:
-            df.at[index, "Sell"] = row["收盤價"]
+        elif (sell_condition_1) and hold == 1:
+            df.at[index, "Sell"] = row["upper"]
             print(f'Sell {index}')
             hold = 0
+        # elif hold == 1 and ((row['收盤價'] / buyPrice) < 0.93):
+        #     df.at[index, "Sell"] = row['收盤價']
+        #     print(f'停損 {index}')
+        #     hold = 0
 
     return df
 
@@ -132,7 +139,7 @@ def main(stock_id, period="12mo", interval='1d'):
 
 if __name__ == "__main__":
     # 1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo
-    df, result_text = main(2317, '36mo', '1d')
+    df, result_text = main('0057', '36mo', '1d')
     print(df)
     print(result_text)
 

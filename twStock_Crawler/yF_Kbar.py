@@ -11,6 +11,12 @@ def get_data(stock_id, period, interval='1d'):
 
     ohlc = ohlc.loc[:, ["Open", "High", "Low", "Close", "Volume"]]
 
+    ohlc['Open'].round(decimals=2)
+    ohlc['High'].round(decimals=2)
+    ohlc['Low'].round(decimals=2)
+    ohlc['Close'].round(decimals=2)
+    ohlc['Volume'].round(decimals=2)
+
     return ohlc
 
 

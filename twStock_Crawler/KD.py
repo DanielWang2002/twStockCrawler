@@ -1,7 +1,7 @@
 import talib
 import pandas as pd
 import yF_Kbar
-import getAllStockId
+import TWStock
 import getKPI
 
 
@@ -85,44 +85,8 @@ def main(stock_id, period="12mo", interval='1d'):
 
 
 if __name__ == "__main__":
-
-    # 獲取所有股票代號
-    stockId = getAllStockId.getAllStockId()
-
-    trade_count = -1
-    total_profit = -1
-    win_rate = -1
-    profit_rate = -1
-
-    bestResult = None
-
-
-    #  and (
-    #                     result_text['數值']['勝率'] > 0.5 > win_rate) and (
-    #                     result_text['數值']['賺賠比'] >= 1 > profit_rate)
-    for i in stockId:
-        try:
-            df, result_text = main(i, '36mo', '1d')
-            if (result_text['數值']['交易次數'] > trade_count) and (
-                    result_text['數值']['總報酬'] > 0 > total_profit):
-                trade_count = result_text['數值']['交易次數']
-                total_profit = result_text['數值']['總報酬']
-                win_rate = result_text['數值']['勝率']
-                profit_rate = result_text['數值']['賺賠比']
-
-                bestResult = result_text
-
-                print('--------------------')
-                print(f"股票代號: {i}")
-                print(f"交易次數: {result_text['數值']['交易次數']}")
-                print(f"總報酬: {result_text['數值']['總報酬']}")
-                print(f"勝率: {result_text['數值']['勝率']}")
-                print(f"賺賠比: {result_text['數值']['賺賠比']}")
-                print('--------------------')
-        except:
-            print('')
-
-    print(bestResult)
+    df, result_text = main('3583', "36mo", '1d')
+    print(result_text)
 
     # for i in range(1100, 10000, 1):
     #     try:
