@@ -81,7 +81,7 @@ def get_KPI(df):
     KPI_df = pd.DataFrame()
     KPI_df.at['交易次數', '數值'] = round(trade_time, 2)
     KPI_df.at['總報酬', '數值'] = round(total_profit, 2)
-    KPI_df.at['平均報酬率', '數值'] = round(per_profit, 2)
+    KPI_df.at['平均報酬率', '數值'] = f'{round(per_profit * 100, 2)}%'
     KPI_df.at['成功次數', '數值'] = round(win_times, 2)
     KPI_df.at['虧損次數', '數值'] = round(loss_times, 2)
     KPI_df.at['勝率', '數值'] = round(win_rate, 2)
