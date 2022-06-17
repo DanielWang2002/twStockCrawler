@@ -21,7 +21,7 @@ def get_TA(stock_id, period="12mo", interval='1d'):
     df["Sell"] = None
 
     # 布林通道 args: close 20 0
-    df['upper'], df['middle'], df['lower'] = talib.BBANDS(df['收盤價'], timeperiod=20, nbdevup=2, nbdevdn=2, matype=0)
+    df['upper'], df['middle'], df['lower'] = talib.BBANDS(df['收盤價'], timeperiod=10, nbdevup=2, nbdevdn=2, matype=0)
 
     fastPeriod = 12
     slowPeriod = 26
@@ -85,7 +85,7 @@ def main(stock_id, period="12mo", interval='1d'):
 
 if __name__ == "__main__":
     # 1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo
-    df, result_text = main(3583, '1mo', '5m')
+    df, result_text = main('5288', '1mo', '15m')
     print(df)
     print(result_text)
 
